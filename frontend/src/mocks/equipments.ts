@@ -5,19 +5,19 @@ export const equipments: Equipment[] = [
     id: "eq-001",
     publicId: "pub-001",
     identification: {
-      placa: "RF-2024-001",
+      nome: "Expositor Carnes",
+      numSerie: "RF-2024-001",
       modelo: "Freezer 500L",
       marca: "CoolTech",
     },
     location: {
       loja: "Loja Central",
-      setor: "Açougue",
-      gpsLat: -23.5505,
-      gpsLng: -46.6333,
+      setor: "açougue",
+      endereco: "Rua do Helder câmera, - recife PE"
     },
     specs: {
-      capacidade: "500 L",
-      voltagem: "220V",
+      compressor: "Danffos - MT-100",
+      controlador: "TC-900E POWER",
       refrigerante: "R-134a",
     },
     status: "operacional",

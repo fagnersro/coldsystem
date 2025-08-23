@@ -13,7 +13,12 @@ export default function AppLayout({ children }: PropsWithChildren) {
             <div className="h-14 flex items-center gap-3 px-4">
               <SidebarTrigger />
               <Separator orientation="vertical" className="h-6" />
-              <h1 className="text-lg font-semibold">Cool Kit Hub</h1>
+              <h1 className="text-lg font-semibold">
+                <span className="text-blue-500">Cold</span>
+                <span className="text-gray-500">system </span> 
+                / 
+                <span className="text-gray-500"> Orlifrio</span>
+                </h1>
             </div>
           </header>
           <main className="flex-1 p-4 md:p-6">

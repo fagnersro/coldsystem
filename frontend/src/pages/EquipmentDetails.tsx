@@ -32,7 +32,7 @@ export default function EquipmentDetails() {
     '@context': 'https://schema.org',
     '@type': 'Product',
     name: `${equipment.identification.marca} ${equipment.identification.modelo}`,
-    sku: equipment.identification.placa,
+    sku: equipment.identification.numSerie,
     brand: equipment.identification.marca,
     url,
   };
@@ -49,8 +49,8 @@ export default function EquipmentDetails() {
       <div className="space-y-6 animate-enter">
         <header className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-semibold">{equipment.identification.modelo}</h1>
-            <p className="text-sm text-muted-foreground">Placa {equipment.identification.placa} • {equipment.identification.marca}</p>
+            <h1 className="text-2xl font-semibold">{equipment.identification.nome}</h1>
+            <p className="text-sm text-muted-foreground">Número de série {equipment.identification.numSerie} • {equipment.identification.marca}</p>
           </div>
           <Badge variant={equipment.status === 'operacional' ? 'secondary' : equipment.status === 'manutencao' ? 'default' : 'destructive'}>
             {equipment.status}
@@ -63,7 +63,7 @@ export default function EquipmentDetails() {
               <CardHeader><CardTitle>Identificação</CardTitle></CardHeader>
               <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                 <div><span className="text-muted-foreground">ID: </span>{equipment.id}</div>
-                <div><span className="text-muted-foreground">Placa: </span>{equipment.identification.placa}</div>
+                <div><span className="text-muted-foreground">Número de série: </span>{equipment.identification.numSerie}</div>
                 <div><span className="text-muted-foreground">Modelo: </span>{equipment.identification.modelo}</div>
                 <div><span className="text-muted-foreground">Marca: </span>{equipment.identification.marca}</div>
               </CardContent>
@@ -74,17 +74,19 @@ export default function EquipmentDetails() {
               <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
                 <div><span className="text-muted-foreground">Loja: </span>{equipment.location.loja}</div>
                 <div><span className="text-muted-foreground">Setor: </span>{equipment.location.setor}</div>
-                {equipment.location.gpsLat && equipment.location.gpsLng && (
-                  <div className="md:col-span-2 text-sm"><span className="text-muted-foreground">GPS: </span>{equipment.location.gpsLat}, {equipment.location.gpsLng}</div>
-                )}
+
+                <div className="md:col-span-2 text-sm">
+                  <span className="text-muted-foreground">Endereço: </span>{equipment.location.endereco}
+                </div>
+  
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader><CardTitle>Especificações técnicas</CardTitle></CardHeader>
               <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                <div><span className="text-muted-foreground">Capacidade: </span>{equipment.specs.capacidade}</div>
-                <div><span className="text-muted-foreground">Voltagem: </span>{equipment.specs.voltagem}</div>
+                <div><span className="text-muted-foreground">Compressor: </span>{equipment.specs.compressor}</div>
+                <div><span className="text-muted-foreground">Controlador: </span>{equipment.specs.controlador}</div>
                 <div><span className="text-muted-foreground">Refrigerante: </span>{equipment.specs.refrigerante}</div>
               </CardContent>
             </Card>

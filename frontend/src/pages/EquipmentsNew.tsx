@@ -15,15 +15,14 @@ import { QRLinkCard } from "../components/QRLinkCard";
 import { toast } from "../hooks/use-toast";
 
 const NewEquipmentSchema = z.object({
-  placa: z.string().min(1, "Obrigatório"),
+  nome: z.string().min(1, "Obrigatório"),
   modelo: z.string().min(1, "Obrigatório"),
+  numSerie: z.string().min(1, "Obrigatório"),
   marca: z.string().min(1, "Obrigatório"),
   loja: z.string().min(1, "Obrigatório"),
   setor: z.string().min(1, "Obrigatório"),
-  gpsLat: z.string().optional(),
-  gpsLng: z.string().optional(),
-  capacidade: z.string().min(1, "Obrigatório"),
-  voltagem: z.string().min(1, "Obrigatório"),
+  compressor: z.string().min(1, "Obrigatório"),
+  controlador: z.string().min(1, "Obrigatório"),
   refrigerante: z.string().min(1, "Obrigatório"),
   observacoes: z.string().optional(),
 });
@@ -34,15 +33,14 @@ export default function EquipmentsNew() {
   const form = useForm<NewEquipmentForm>({
     resolver: zodResolver(NewEquipmentSchema),
     defaultValues: {
-      placa: "",
+      nome: "",
       modelo: "",
+      numSerie: "",
       marca: "",
       loja: "",
       setor: "",
-      gpsLat: "",
-      gpsLng: "",
-      capacidade: "",
-      voltagem: "",
+      compressor: "",
+      controlador: "",
       refrigerante: "",
       observacoes: "",
     },
@@ -64,7 +62,7 @@ export default function EquipmentsNew() {
 
   const onSubmit = (values: NewEquipmentForm) => {
     // Mock de criação. Aqui geraria o QR no servidor e salvaria no banco.
-    toast({ title: "Equipamento cadastrado!", description: values.placa });
+    toast({ title: "Equipamento cadastrado!", description: values.nome });
   };
 
   const saveDraft = () => {
@@ -100,17 +98,18 @@ export default function EquipmentsNew() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <FormField
                       control={form.control}
-                      name="placa"
+                      name="nome"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Placa/Patrimônio</FormLabel>
+                          <FormLabel>Nome</FormLabel>
                           <FormControl>
-                            <Input placeholder="RF-2024-001" {...field} />
+                            <Input placeholder="Expositor/Freezer" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
+
                     <FormField
                       control={form.control}
                       name="modelo"
@@ -118,7 +117,21 @@ export default function EquipmentsNew() {
                         <FormItem>
                           <FormLabel>Modelo</FormLabel>
                           <FormControl>
-                            <Input placeholder="Freezer 500L" {...field} />
+                            <Input placeholder="GS1520-2" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="numSerie"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Número de Série</FormLabel>
+                          <FormControl>
+                            <Input placeholder="RF-2024-001" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -167,44 +180,19 @@ export default function EquipmentsNew() {
                       )}
                     />
                     <div className="grid grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="gpsLat"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>GPS Lat</FormLabel>
-                            <FormControl>
-                              <Input placeholder="-23.55" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="gpsLng"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>GPS Lng</FormLabel>
-                            <FormControl>
-                              <Input placeholder="-46.63" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <FormField
                       control={form.control}
-                      name="capacidade"
+                      name="compressor"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Capacidade</FormLabel>
+                          <FormLabel>Compressor</FormLabel>
                           <FormControl>
-                            <Input placeholder="500 L" {...field} />
+                            <Input placeholder="Danffos - MT60" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -212,12 +200,12 @@ export default function EquipmentsNew() {
                     />
                     <FormField
                       control={form.control}
-                      name="voltagem"
+                      name="controlador"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Voltagem</FormLabel>
+                          <FormLabel>Controlador</FormLabel>
                           <FormControl>
-                            <Input placeholder="220V" {...field} />
+                            <Input placeholder="TC-900E POWER" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
