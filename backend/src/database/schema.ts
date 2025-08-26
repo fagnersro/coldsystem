@@ -1,39 +1,18 @@
-import { pgTable, varchar, text, jsonb } from "drizzle-orm/pg-core"
+import { pgTable, uuid, varchar, text } from "drizzle-orm/pg-core"
 
 export const equipments = pgTable("equipments", {
-  id: varchar("id", { length: 50 }).primaryKey(),
-  publicId: varchar("public_id", { length: 50 }).notNull(),
-
-  identification: jsonb("identification").$type<{
-    nome: string;
-    numSerie: string;
-    modelo: string;
-    marca: string;
-  }>().notNull(),
-
-  location: jsonb("location").$type<{
-    loja: string;
-    setor: string;
-    endereco: string;
-  }>().notNull(),
-
-  specs: jsonb("specs").$type<{
-    compressor: string;
-    controlador: string;
-    refrigerante: string;
-  }>().notNull(),
-
-  status: text("status").notNull(),
-
-  photos: jsonb("photos").$type<string[]>().notNull().default([]),
-
-  history: jsonb("history").$type<{
-    id: string;
-    date: string;
-    type: string;
-    description: string;
-    photos: string[];
-  }[]>().notNull().default([]),
-
-  observacoes: text("observacoes"),
+  id: uuid().primaryKey().defaultRandom(),
+  publicId: varchar("public_id", { length: 50 }).notNull().unique(),
+  name: text().notNull(),
+  modelo: text().notNull(),
+  numSerie: text().notNull().unique(),
+  marca: text().notNull(),
+  loja: text().notNull(),
+  setor: text().notNull(),
+  endereco: text().notNull(),
+  compressor: text().notNull(),
+  controlador: text().notNull(),
+  refrigerante: text().notNull(),
+  status: text().notNull(),
+  observacoes: text(),
 })

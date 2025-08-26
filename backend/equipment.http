@@ -2,27 +2,17 @@ POST http://localhost:3333/equipments
 Content-Type: application/json
 
 {
-  "id": "PKA-01",
   "publicId": "pub-001",
-  "identification": {
-    "nome": "Expositor Carnes",
-    "numSerie": "RF-2024-001",
-    "modelo": "Freezer 500L",
-    "marca": "CoolTech"
-  },
-  "location": {
-    "loja": "Loja Central",
-    "setor": "açougue",
-    "endereco": "Rua do Helder câmera, - recife PE"
-  },
-  "specs": {
-    "compressor": "Danffos - MT-100",
-    "controlador": "TC-900E POWER",
-    "refrigerante": "R-134a"
-  },
-  
+  "name": "Expositor Carnes",
+  "numSerie": "RF-2024-001",
+  "modelo": "Freezer 500L",
+  "marca": "CoolTech",
+  "loja": "Loja Central",
+  "setor": "açougue",
+  "endereco": "Rua do Helder câmera, - recife PE",
+  "compressor": "Danffos - MT-100",
+  "controlador": "TC-900E POWER",
+  "refrigerante": "R-134a",
   "status": "operacional",
-  "photos": [],
-  "history": [],
   "observacoes": "Primeira instalação feita em 2024"
 }

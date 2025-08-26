@@ -1,5 +1,5 @@
 {
-  "id": "7755fbfd-09b2-4413-b1d9-6f55f0498287",
+  "id": "0b09ed20-bb4c-4320-b3f1-48e53226938c",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -10,9 +10,10 @@
       "columns": {
         "id": {
           "name": "id",
-          "type": "varchar(50)",
+          "type": "uuid",
           "primaryKey": true,
-          "notNull": true
+          "notNull": true,
+          "default": "gen_random_uuid()"
         },
         "public_id": {
           "name": "public_id",
@@ -20,21 +21,63 @@
           "primaryKey": false,
           "notNull": true
         },
-        "identification": {
-          "name": "identification",
-          "type": "jsonb",
+        "name": {
+          "name": "name",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "location": {
-          "name": "location",
-          "type": "jsonb",
+        "modelo": {
+          "name": "modelo",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
-        "specs": {
-          "name": "specs",
-          "type": "jsonb",
+        "numSerie": {
+          "name": "numSerie",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "marca": {
+          "name": "marca",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "loja": {
+          "name": "loja",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "setor": {
+          "name": "setor",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "endereco": {
+          "name": "endereco",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "compressor": {
+          "name": "compressor",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "controlador": {
+          "name": "controlador",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "refrigerante": {
+          "name": "refrigerante",
+          "type": "text",
           "primaryKey": false,
           "notNull": true
         },
@@ -43,20 +86,6 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
-        },
-        "photos": {
-          "name": "photos",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'[]'::jsonb"
-        },
-        "history": {
-          "name": "history",
-          "type": "jsonb",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'[]'::jsonb"
         },
         "observacoes": {
           "name": "observacoes",
@@ -68,7 +97,22 @@
       "indexes": {},
       "foreignKeys": {},
       "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
+      "uniqueConstraints": {
+        "equipments_public_id_unique": {
+          "name": "equipments_public_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "public_id"
+          ]
+        },
+        "equipments_numSerie_unique": {
+          "name": "equipments_numSerie_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "numSerie"
+          ]
+        }
+      },
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
