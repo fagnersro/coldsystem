@@ -16,7 +16,6 @@ const server = fastify({
 
 server.setValidatorCompiler(validatorCompiler)
 server.setSerializerCompiler(serializerCompiler)
-
 server.register(createEquipmentRoute)
 
 export { server }

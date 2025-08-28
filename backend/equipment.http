@@ -3,9 +3,9 @@ Content-Type: application/json
 
 {
   "publicId": "pub-001",
-  "name": "Expositor Carnes",
-  "numSerie": "RF-2024-001",
+  "name": "Carnes",
   "modelo": "Freezer 500L",
+  "numSerie": "RF-2024-001",
   "marca": "CoolTech",
   "loja": "Loja Central",
   "setor": "açougue",
