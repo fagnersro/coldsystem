@@ -14,13 +14,16 @@ import { FileUploader } from "../components/FileUploader";
 import { QRLinkCard } from "../components/QRLinkCard";
 import { toast } from "../hooks/use-toast";
 
+
 const NewEquipmentSchema = z.object({
-  nome: z.string().min(1, "Obrigatório"),
+  name: z.string().min(1, "Obrigatório"),
   modelo: z.string().min(1, "Obrigatório"),
   numSerie: z.string().min(1, "Obrigatório"),
   marca: z.string().min(1, "Obrigatório"),
   loja: z.string().min(1, "Obrigatório"),
   setor: z.string().min(1, "Obrigatório"),
+  endereco: z.string().min(1, "Obrigatório"),
+  status: z.string(),
   compressor: z.string().min(1, "Obrigatório"),
   controlador: z.string().min(1, "Obrigatório"),
   refrigerante: z.string().min(1, "Obrigatório"),
@@ -33,12 +36,14 @@ export default function EquipmentsNew() {
   const form = useForm<NewEquipmentForm>({
     resolver: zodResolver(NewEquipmentSchema),
     defaultValues: {
-      nome: "",
+      name: "",
       modelo: "",
       numSerie: "",
       marca: "",
       loja: "",
       setor: "",
+      endereco: "",
+      status: "",
       compressor: "",
       controlador: "",
       refrigerante: "",
@@ -60,9 +65,51 @@ export default function EquipmentsNew() {
     }
   }, []);
 
-  const onSubmit = (values: NewEquipmentForm) => {
+  const onSubmit = async (values: NewEquipmentForm) => {
     // Mock de criação. Aqui geraria o QR no servidor e salvaria no banco.
-    toast({ title: "Equipamento cadastrado!", description: values.nome });
+    try {
+      const payload = {
+        publicId,
+        name: values.name,
+        modelo: values.modelo,
+        numSerie: values.numSerie,
+        marca: values.marca,
+        loja: values.loja,
+        setor: values.setor,
+        endereco: values.endereco,
+        status: "ativo",
+        compressor: values.compressor,
+        controlador: values.controlador,
+        refrigerante: values.refrigerante,
+        observacoes: values.observacoes
+      }
+
+      const res = await fetch("http://192.168.1.17:3333/equipments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        throw new Error("Erro ao cadastrar equipamento")
+      }
+
+      const data = await res.json();
+
+      toast({
+        title: "Equipamento cadastrado!",
+        description: `ID: ${data.id} - ${values.name}`
+      })
+
+      form.reset();
+      setPublicId(Math.random().toString(36).slice(2, 10));
+    } catch (err: any) {
+      toast({
+        title: "Error",
+        description: err.message || "Falha no cadastro",
+        variant: "destructive",
+      });
+    }
   };
 
   const saveDraft = () => {
@@ -98,7 +145,7 @@ export default function EquipmentsNew() {
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <FormField
                       control={form.control}
-                      name="nome"
+                      name="name"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Nome</FormLabel>
@@ -183,6 +230,20 @@ export default function EquipmentsNew() {
 
                     </div>
                   </div>
+
+                  <FormField
+                    control={form.control}
+                    name="endereco"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Endereço</FormLabel>
+                        <FormControl>
+                          <Textarea placeholder="Descreva o endereço" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <FormField
