@@ -16,3 +16,7 @@ Content-Type: application/json
   "status": "operacional",
   "observacoes": "Primeira instalação feita em 2024"
 }
+
+###
+
+GET http://localhost:3333/equipments?search=
