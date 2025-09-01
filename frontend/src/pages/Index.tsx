@@ -3,40 +3,9 @@ import AppLayout from "../layouts/AppLayout";
 import { SEO } from "../components/SEO";
 import { Button } from "../components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
-import { useEffect, useState } from "react";
-
-
-interface Equipment {
-  publicId: string;
-  numSerie: string;
-  modelo: string;
-  status: string;
-}
-
-interface EquipmentResponse {
-  equipments: Equipment[]
-}
+import TbodyEquipmentList from "../components/TbodyEquipmentList";
 
 export default function Index() {
-  const [equipments, setEquipments] = useState<Equipment[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}/equipments`)
-      .then((res) => {
-        if (!res.ok) throw new Error("Erro na requisição");
-        return res.json();
-      })
-      .then((data: EquipmentResponse) => {
-        setEquipments(data.equipments);
-      })
-      .catch((err) => console.error(err))
-      .finally(() => setLoading(false));
-  }, [])
-
-  if (loading) return <p>Carregando...</p>
-  console.log(equipments)
-  
   return (
     <AppLayout>
       <SEO title="Gestão de Equipamentos de Refrigeração" description="Cadastre, gere QR e acompanhe manutenções." canonicalPath="/" />
@@ -68,18 +37,7 @@ export default function Index() {
                       <th className="py-2 pr-4">Ações</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    {equipments.map((e: Equipment) => (
-                      <tr key={e.publicId} className="border-b last:border-0">
-                        <td className="py-2 pr-4">{e.numSerie}</td>
-                        <td className="py-2 pr-4">{e.modelo}</td>
-                        <td className="py-2 pr-4 capitalize">{e.status}</td>
-                        <td className="py-2 pr-4">
-                          <Button asChild variant="link" size="sm"><Link to={`/equipments/${e.publicId}`}>Ver detalhes</Link></Button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
+                    <TbodyEquipmentList />
                 </table>
               </div>
             </CardContent>

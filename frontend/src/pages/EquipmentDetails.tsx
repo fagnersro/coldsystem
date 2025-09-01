@@ -1,8 +1,7 @@
-import { useMemo } from "react";
 import { useParams, Link } from "react-router-dom";
 import AppLayout from "../layouts/AppLayout";
 import { SEO } from "../components/SEO";
-import { getEquipmentById } from "../mocks/equipments";
+import { useQuery } from '@tanstack/react-query'
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
@@ -10,11 +9,55 @@ import { QRLinkCard } from "../components/QRLinkCard";
 import { PhotoGallery } from "../components/PhotoGallery";
 import { Edit, QrCode, Printer, Wrench } from "lucide-react";
 
-export default function EquipmentDetails() {
-  const { id } = useParams();
-  const equipment = useMemo(() => (id ? getEquipmentById(id) : null), [id]);
+interface EquipmentDetails {
+  id: string;
+  publicId: string;
+  name: string;
+  modelo: string;
+  numSerie: string;
+  marca: string;
+  loja: string;
+  setor: string;
+  endereco: string;
+  compressor: string;
+  controlador: string;
+  refrigerante: string;
+  status: string;
+  observacoes: string;
+}
 
-  if (!equipment) {
+async function getEquipmentById(id: string): Promise<EquipmentDetails> {
+  const result = await fetch(`${import.meta.env.VITE_API_URL}/equipments/${id}`);
+  if (!result.ok) throw new Error("Erro ao buscar  equipamento");
+  
+
+  const data = await result.json();
+  console.log(data)
+  return data.equipment
+}
+
+export default function EquipmentDetails() {
+  const { id } = useParams<{ id: string }>();
+  const { 
+    data: equipment, 
+    isLoading, 
+    error 
+  } = useQuery<EquipmentDetails>({
+    queryKey: ["equipment", id],
+    queryFn: () => getEquipmentById(id!),
+    enabled: !!id,
+  })
+
+  if (isLoading) {
+    return (
+      <AppLayout>
+        <SEO title="Carregando equipamento..." description="Carregando os detalhes" canonicalPath={`/equipments/${id ?? ''}`} />
+        <p>Carregando...</p>
+      </AppLayout>
+    );
+  }
+
+  if (error || !equipment) {
     return (
       <AppLayout>
         <SEO title="Equipamento não encontrado" description="O recurso não foi localizado" canonicalPath={`/equipments/${id ?? ''}`} />
@@ -31,26 +74,26 @@ export default function EquipmentDetails() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Product',
-    name: `${equipment.identification.marca} ${equipment.identification.modelo}`,
-    sku: equipment.identification.numSerie,
-    brand: equipment.identification.marca,
+    name: `${equipment.marca} ${equipment.modelo}`,
+    sku: equipment.numSerie,
+    brand: equipment.marca,
     url,
   };
 
   return (
     <AppLayout>
       <SEO
-        title={`${equipment.identification.modelo} | Detalhes do Equipamento`}
+        title={`${equipment.modelo} | Detalhes do Equipamento`}
         description={`Veja identificação, localização, especificações e histórico de manutenção.`}
-        canonicalPath={`/equipments/${equipment.id}`}
+        canonicalPath={`/equipments/${equipment.publicId}`}
         jsonLd={jsonLd}
       />
 
       <div className="space-y-6 animate-enter">
         <header className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-semibold">{equipment.identification.nome}</h1>
-            <p className="text-sm text-muted-foreground">Número de série {equipment.identification.numSerie} • {equipment.identification.marca}</p>
+            <h1 className="text-2xl font-semibold">{equipment.name}</h1>
+            <p className="text-sm text-muted-foreground">Número de série {equipment.numSerie} • {equipment.marca}</p>
           </div>
           <Badge variant={equipment.status === 'operacional' ? 'secondary' : equipment.status === 'manutencao' ? 'default' : 'destructive'}>
             {equipment.status}
@@ -62,21 +105,21 @@ export default function EquipmentDetails() {
             <Card>
               <CardHeader><CardTitle>Identificação</CardTitle></CardHeader>
               <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                <div><span className="text-muted-foreground">ID: </span>{equipment.id}</div>
-                <div><span className="text-muted-foreground">Número de série: </span>{equipment.identification.numSerie}</div>
-                <div><span className="text-muted-foreground">Modelo: </span>{equipment.identification.modelo}</div>
-                <div><span className="text-muted-foreground">Marca: </span>{equipment.identification.marca}</div>
+                <div><span className="text-muted-foreground">ID: </span>{equipment.publicId}</div>
+                <div><span className="text-muted-foreground">Número de série: </span>{equipment.numSerie}</div>
+                <div><span className="text-muted-foreground">Modelo: </span>{equipment.modelo}</div>
+                <div><span className="text-muted-foreground">Marca: </span>{equipment.marca}</div>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader><CardTitle>Localização</CardTitle></CardHeader>
               <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                <div><span className="text-muted-foreground">Loja: </span>{equipment.location.loja}</div>
-                <div><span className="text-muted-foreground">Setor: </span>{equipment.location.setor}</div>
+                <div><span className="text-muted-foreground">Loja: </span>{equipment.loja}</div>
+                <div><span className="text-muted-foreground">Setor: </span>{equipment.setor}</div>
 
                 <div className="md:col-span-2 text-sm">
-                  <span className="text-muted-foreground">Endereço: </span>{equipment.location.endereco}
+                  <span className="text-muted-foreground">Endereço: </span>{equipment.endereco}
                 </div>
   
               </CardContent>
@@ -85,9 +128,9 @@ export default function EquipmentDetails() {
             <Card>
               <CardHeader><CardTitle>Especificações técnicas</CardTitle></CardHeader>
               <CardContent className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                <div><span className="text-muted-foreground">Compressor: </span>{equipment.specs.compressor}</div>
-                <div><span className="text-muted-foreground">Controlador: </span>{equipment.specs.controlador}</div>
-                <div><span className="text-muted-foreground">Refrigerante: </span>{equipment.specs.refrigerante}</div>
+                <div><span className="text-muted-foreground">Compressor: </span>{equipment.compressor}</div>
+                <div><span className="text-muted-foreground">Controlador: </span>{equipment.controlador}</div>
+                <div><span className="text-muted-foreground">Refrigerante: </span>{equipment.refrigerante}</div>
               </CardContent>
             </Card>
 
@@ -101,7 +144,8 @@ export default function EquipmentDetails() {
                   <Button variant="ghost" size="sm">Com fotos</Button>
                 </div>
                 <ul className="space-y-3">
-                  {equipment.history.map((h) => (
+                  <p>Histórico dados</p>
+                  {/* {equipment.history.map((h) => (
                     <li key={h.id} className="rounded-md border p-3">
                       <div className="flex items-center justify-between">
                         <div className="font-medium">{new Date(h.date).toLocaleString()}</div>
@@ -109,7 +153,7 @@ export default function EquipmentDetails() {
                       </div>
                       <p className="text-sm text-muted-foreground mt-1">{h.description}</p>
                     </li>
-                  ))}
+                  ))} */}
                 </ul>
               </CardContent>
             </Card>
@@ -117,7 +161,8 @@ export default function EquipmentDetails() {
             <Card>
               <CardHeader><CardTitle>Fotos</CardTitle></CardHeader>
               <CardContent>
-                <PhotoGallery images={equipment.photos} />
+                <p>Galeria de fotos</p>
+                {/* <PhotoGallery images={equipment.photos} /> */}
               </CardContent>
             </Card>
           </div>

@@ -84,7 +84,7 @@ export default function EquipmentsNew() {
         observacoes: values.observacoes
       }
 
-      const res = await fetch("http://192.168.1.17:3333/equipments", {
+      const res = await fetch("http://192.168.1.12:3333/equipments", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -98,7 +98,7 @@ export default function EquipmentsNew() {
 
       toast({
         title: "Equipamento cadastrado!",
-        description: `ID: ${data.id} - ${values.name}`
+        description: `ID: ${data.publicId} - ${values.name}`
       })
 
       form.reset();
