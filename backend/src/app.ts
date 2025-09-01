@@ -2,6 +2,7 @@ import fastify from "fastify"
 import { createEquipmentRoute } from "./routes/create-equipments.ts"
 import { serializerCompiler, validatorCompiler, type ZodTypeProvider } from "fastify-type-provider-zod"
 import { getEquipmentRoute } from "./routes/get-equipments.ts"
+import { getEquipmentsByIdRoute } from "./routes/get-equipment-by-id.ts"
 
 const server = fastify({
   logger: {
@@ -17,7 +18,9 @@ const server = fastify({
 
 server.setValidatorCompiler(validatorCompiler)
 server.setSerializerCompiler(serializerCompiler)
+
 server.register(createEquipmentRoute)
 server.register(getEquipmentRoute)
+server.register(getEquipmentsByIdRoute)
 
 export { server }

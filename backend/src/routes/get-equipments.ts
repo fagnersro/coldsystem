@@ -18,8 +18,19 @@ export const  getEquipmentRoute: FastifyPluginAsyncZod = async (server) => {
       response: {
         200: z.object({
           equipments: z.array(z.object({
-            id: z.uuid(),
+            publicId: z.string(),
             name: z.string(),
+            modelo: z.string(),
+            numSerie: z.string(),
+            marca: z.string(),
+            loja: z.string(),
+            setor: z.string(),
+            endereco: z.string(),
+            compressor: z.string(),
+            controlador: z.string(),
+            refrigerante: z.string(),
+            status: z.string(),
+            observacoes: z.string().nullable(),
           })
          ),
          total: z.number()
@@ -38,8 +49,19 @@ export const  getEquipmentRoute: FastifyPluginAsyncZod = async (server) => {
     const [result, total] = await Promise.all([
         db
         .select({
-          id: equipments.id,
+          publicId: equipments.publicId,
           name: equipments.name,
+          modelo: equipments.modelo,
+          numSerie: equipments.numSerie,
+          marca: equipments.marca,
+          loja: equipments.loja,
+          setor: equipments.setor,
+          endereco: equipments.endereco,
+          compressor: equipments.compressor,
+          controlador: equipments.controlador,
+          refrigerante: equipments.refrigerante,
+          status: equipments.status,
+          observacoes: equipments.observacoes
       })
         .from(equipments)
         .orderBy(asc(equipments[orderBy]))
