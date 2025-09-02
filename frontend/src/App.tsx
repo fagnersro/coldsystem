@@ -9,7 +9,14 @@ import EquipmentsNew from "./pages/EquipmentsNew";
 import EquipmentDetails from "./pages/EquipmentDetails";
 import Settings from "./pages/Settings";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 1,
+    }
+  }
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>

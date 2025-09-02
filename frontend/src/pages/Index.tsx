@@ -31,7 +31,7 @@ export default function Index() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="text-left text-muted-foreground border-b">
-                      <th className="py-2 pr-4">Número de Série</th>
+                      <th className="py-2 pr-4">Equipamento</th>
                       <th className="py-2 pr-4">Modelo</th>
                       <th className="py-2 pr-4">Status</th>
                       <th className="py-2 pr-4">Ações</th>

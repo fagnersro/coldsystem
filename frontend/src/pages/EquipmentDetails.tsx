@@ -8,8 +8,11 @@ import { Button } from "../components/ui/button";
 import { QRLinkCard } from "../components/QRLinkCard";
 import { PhotoGallery } from "../components/PhotoGallery";
 import { Edit, QrCode, Printer, Wrench } from "lucide-react";
+import { useState } from "react";
+import { EditEquipmentDialog } from "../components/EditEquipmentDialog";
+import { useUpdateEquipment } from "../hooks/use-update-equipment";
 
-interface EquipmentDetails {
+ interface EquipmentDetails {
   id: string;
   publicId: string;
   name: string;
@@ -37,7 +40,9 @@ async function getEquipmentById(id: string): Promise<EquipmentDetails> {
 }
 
 export default function EquipmentDetails() {
+  const [isEditOpen, setIsEditOpen] = useState(false);
   const { id } = useParams<{ id: string }>();
+  const updateEquipment = useUpdateEquipment()
   const { 
     data: equipment, 
     isLoading, 
@@ -70,6 +75,14 @@ export default function EquipmentDetails() {
   }
 
   const url = `${window.location.origin}/equipments/${equipment.publicId}`;
+
+  const handleEditSave = (data: any) => {
+    updateEquipment.mutate({
+      id: equipment.publicId,
+      data: data
+    })
+    console.log('Edit data:', data);
+  };
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -173,7 +186,13 @@ export default function EquipmentDetails() {
             <Card>
               <CardHeader><CardTitle>Ações</CardTitle></CardHeader>
               <CardContent className="flex flex-col gap-2">
-                <Button variant="secondary" className="justify-start"><Edit className="mr-2" /> Editar</Button>
+                <Button 
+                  variant="secondary" 
+                  className="justify-start"
+                  onClick={() => setIsEditOpen(true)}
+                  >
+                  <Edit className="mr-2" /> Editar
+                </Button>
                 <Button variant="secondary" className="justify-start"><QrCode className="mr-2" /> Gerar novo QR</Button>
                 <Button variant="secondary" className="justify-start"><Printer className="mr-2" /> Imprimir etiqueta</Button>
                 <Button className="justify-start"><Wrench className="mr-2" /> Registrar manutenção</Button>
@@ -182,6 +201,14 @@ export default function EquipmentDetails() {
           </div>
         </div>
       </div>
+
+      {/* Action Dialogs */}
+      <EditEquipmentDialog
+        equipment={equipment}
+        open={isEditOpen}
+        onOpenChange={setIsEditOpen}
+        onSave={handleEditSave}
+      />
     </AppLayout>
   );
 }

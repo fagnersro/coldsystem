@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query"
 
 interface Equipment {
   publicId: string;
+  name: string;
   numSerie: string;
   modelo: string;
   status: string;
@@ -56,7 +57,7 @@ export default function TbodyEquipmentList () {
     <tbody>
       {data?.map((e: Equipment) => (
         <tr key={e.publicId} className="border-b last:border-0">
-        <td className="py-2 pr-4">{e.numSerie}</td>
+        <td className="py-2 pr-4">{e.name}</td>
         <td className="py-2 pr-4">{e.modelo}</td>
         <td className="py-2 pr-4 capitalize">{e.status}</td>
         <td className="py-2 pr-4">
